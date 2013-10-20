@@ -1,0 +1,18 @@
+su
+cp dynamic_motd /usr/local/bin/dynamic_motd
+chmod 777 /usr/local/bin/dynamic_motd
+vim /usr/local/bin/dynamic_motd
+touch /etc/serviceinfo
+vim /etc/serviceinfo
+vim /etc/ssh/sshd_config
+    Replace: 1.PrintMotd no
+             2.PrintLastLog yes 
+vim /etc/pam.d/sshd
+    Comment: 1.session    optional     pam_motd.so
+             2.session    optional     pam_motd.so  motd=/run/motd.dynamic noupdate
+vim /etc/pam.d/login
+    Comment: 1.session    optional     pam_motd.so
+             2.session    optional     pam_motd.so  motd=/run/motd.dynamic noupdate
+service ssh restart
+vim /etc/profile
+    Add:     1./usr/local/bin/dynamic_motd
